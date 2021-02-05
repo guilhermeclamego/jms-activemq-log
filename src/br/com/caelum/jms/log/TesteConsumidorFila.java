@@ -13,9 +13,9 @@ public class TesteConsumidorFila {
 
         Connection connection = factory.createConnection();
         connection.start();
-        Session session = connection.createSession(true, Session.SESSION_TRANSACTED);
+        Session session = connection.createSession(true, Session.AUTO_ACKNOWLEDGE);
 
-        Destination fila = (Destination) context.lookup("financeiro");
+        Destination fila = (Destination) context.lookup("LOG");
         MessageConsumer consumer = session.createConsumer(fila);
 
 
@@ -26,7 +26,6 @@ public class TesteConsumidorFila {
             try {
                 //message.acknowledge();
                 System.out.println(textMessage.getText());
-                session.commit();
                 //Com rollback irá tentar enviar 6 vezes e se tornará uma DLQ, como está com rollback, logo não irá commitar
             } catch (JMSException e) {
                 e.printStackTrace();
